@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/documento.js"></script>
+	<script src="js/SCORMGeneric.js"></script>
+	<script type="text/javascript">
+		 function SubmitAnswers(total, correct){
+		 	ScormProcessSetValue("cmi.core.score.raw", (correct/total)*100);
+        	ScormProcessSetValue("cmi.core.score.min", "0");
+        	ScormProcessSetValue("cmi.core.score.max", "100");
+         }
+        var estados = []
+
+        var totalacciones = 0
+        var totalreglas = 0
+        var totalestado = 0
+
+        //check your answers
+        function check(){
+
+            accionesok = 0
+            reglasok = 0
+            estadosok = 0
+            
+            for(elem in respuestas){
+                if(respuestas[elem].type == 1){
+                    if(acciones.includes(respuestas[elem].id)){
+                        accionesok++
+                    }
+                }else if(respuestas[elem].type == 2){
+                    if(reglas.includes(respuestas[elem].id)){
+                        reglasok++
+                    }
+                }else if(respuestas[elem].type == 3){
+                    if(estados.includes(respuestas[elem].id)){
+                        estadosok++
+                    }
+                }
+            }
+            SubmitAnswers(totalacciones+totalreglas+totalestado, accionesok+reglasok+estadosok)
+
+            document.body.innerHTML = ""
+
+            document.write("<br><h1>Your grade is: "+((accionesok+reglasok+estadosok)/(totalacciones+totalreglas+totalestado))*100+" / 100")
+
+            //check logic
+            document.write("<h2>You got "+accionesok+" Actions right out of "+totalacciones+"</h2><br><br>")
+            if(accionesok <= Math.floor(totalacciones/2)){
+                document.write("Are you sure that you understand Actions? Remember what your class notes tell you: \"Ations are what the system <i>does</i>\"<br><br><br>")
+            }
+            document.write("<h2>You got "+reglasok+" Rules right out of "+totalreglas+"</h2><br><br>")
+            if(reglasok <= Math.floor(totalreglas/2)){
+                document.write("Are you sure that you understand Rules? Remember what your class notes tell you: \"Rules are found tipically inside Actions, they are <i>conditions</i> that modify the behaviour of the system.\"<br><br><br>")
+            }
+            document.write("<h2>You got "+estadosok+" States right out of "+totalestado+"</h2><br><br>")
+            if(estadosok <= Math.floor(totalestado/2)){
+                document.write("Are you sure that you understand States? Remember what your class nores tell you: \"States are tipically found <i>outside</i> Actions, they are situations that modify the behaviour of the system, like \"modes\", that can allow or forbid the execution of Actions\"<br><br><br>")
+            }
+        
+            //SCOFinish()
+        }
+    </script>
+
+    <title>Ejercicio Requisitos</title>
+
+</head>
+<body>
+    <div class="container">
+        <div class="document">
+            <div id="exercise-list"></div>
+            <div class="button-container">
+                <button class="button" onclick="Comp()">Solve</button>
+                <button class="button" onclick="clearing()">Clear</button> 
+            </div>
+        </div>
+        <div class="boxes">
+            <div>to add an element, click on a line and drag it to the boxes below:</div>
+            <br>
+            <div id="accionesdiv" ondrop="drop(event)" ondragover="allowDrop(event)"><u>Actions</u><br></div>
+    
+            <div id="reglasdiv" ondrop="drop(event)" ondragover="allowDrop(event)"><u>Rules</u><br></div>
+
+            <div id="estadosdiv" ondrop="drop(event)" ondragover="allowDrop(event)"><u>State</u><br></div>
+        </div>
+    </div>
+</body>
+</html>
